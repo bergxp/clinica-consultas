@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏥 Painel de Chamadas de Consultas - Clínica Médica
 
-## Getting Started
+Sistema simples de gerenciamento de fila e chamada de pacientes para consultórios, com painel de visualização e controle. Ideal para clínicas, consultórios e unidades básicas de saúde.
 
-First, run the development server:
+---
 
-```bash
+## 🚀 Funcionalidades
+
+- ✅ Cadastro de pacientes em fila de espera
+- ✅ Chamada de próximo paciente para o consultório
+- ✅ Visualização de lista de espera em tempo real
+- ✅ Exibição do paciente atual em atendimento
+- ✅ Histórico de últimas chamadas
+- ✅ Backend com API REST usando MySQL
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Frontend:
+- [React](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+### Backend:
+- API com `app/api` do Next.js (App Router)
+- Banco de Dados: `MySQL` com `mysql2/promise`
+
+---
+
+## 📦 Instalação Local
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) v18+
+- [MySQL](https://www.mysql.com/)
+- [Git](https://git-scm.com/)
+- Um gerenciador de pacotes: `npm` ou `yarn`
+
+### 1. Clone o repositório
+
+git clone https://github.com/seu-usuario/nome-do-repo.git
+cd nome-do-repo
+
+### 2. Instale as dependências
+npm install
+
+### 3. Configure as variáveis de ambiente
+Crie um arquivo .env.local na raiz do projeto com as seguintes variáveis:
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=sua_senha
+DB_NAME=nome_do_banco
+
+
+### 4. Crie a tabela no MySQL
+CREATE TABLE pacientes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nome VARCHAR(100) NOT NULL
+);
+
+### 5. Inicie o projeto
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+O sistema estará disponível em: http://localhost:3000
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 📂 Estrutura do Projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+/app
+  /api/pacientes          ← Endpoints de API
+  page.tsx                ← Página principal com painel
+.env.local                ← Configurações do banco
+README.md                 ← Este arquivo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 📌 Melhorias Futuras
+📡 Atualização em tempo real com WebSocket
 
-## Learn More
+📲 Interface para recepção
 
-To learn more about Next.js, take a look at the following resources:
+📢 Suporte a chamada por áudio
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+🛡️ Autenticação de usuários
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+🗂️ Gerenciamento por consultório específico
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🤝 Contribuições
+Contribuições são bem-vindas! Basta:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Forkar o projeto
+
+Criar uma branch (git checkout -b minha-feature)
+
+Commitar as alterações (git commit -m 'feat: nova funcionalidade')
+
+Enviar um Pull Request 🚀
+
+
