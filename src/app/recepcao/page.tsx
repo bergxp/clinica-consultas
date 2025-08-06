@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-export default function Paciente() {
+export default function Recepcao() {
 
   type Paciente = { id: number; nome: string };
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
