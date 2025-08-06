@@ -66,7 +66,7 @@ es.onmessage = handleEvent as (this: EventSource, ev: MessageEvent) => void;
     <div>
       <h1>Painel de chamadas</h1>
       <ul>
-        {pacientes.map((p) => (
+        {Array.isArray(pacientes) && pacientes.map((p) => (
           <li key={p.id}>
             {p.id} - {p.nome}
           </li>
