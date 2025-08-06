@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏥 Painel de Chamadas de Consultas - Clínica Médica
 
 Sistema simples de gerenciamento de fila e chamada de pacientes para consultórios, com painel de visualização e controle. Ideal para clínicas, consultórios e unidades básicas de saúde.
@@ -95,3 +96,7 @@ Commitar as alterações (git commit -m 'feat: nova funcionalidade')
 Enviar um Pull Request 🚀
 
 
+=======
+# clinica-consultas
+Sistema de painel de chamadas para clínicas e consultórios, com cadastro de pacientes, controle de fila e direcionamento para o consultório.
+>>>>>>> fbd1854ac3443beaa11b76512043bf00a1142e35
