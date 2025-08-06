@@ -2,6 +2,9 @@
 import mysql from "mysql2/promise";
 import { NextResponse } from "next/server";
 import { broadcast, Paciente } from "@/lib/sse";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 interface ResultSetHeader {
   insertId: number;
@@ -15,6 +18,7 @@ async function ConnectDB() {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
+        port: Number(process.env.DB_PORT) || 3306, // porta padrão do MySQL
     });
     return connection;
   } catch (error) {

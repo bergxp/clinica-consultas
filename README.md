@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # 🏥 Painel de Chamadas de Consultas - Clínica Médica
 
 Sistema simples de gerenciamento de fila e chamada de pacientes para consultórios, com painel de visualização e controle. Ideal para clínicas, consultórios e unidades básicas de saúde.
@@ -17,17 +17,13 @@ Sistema simples de gerenciamento de fila e chamada de pacientes para consultóri
 ---
 
 ## 🛠️ Tecnologias Utilizadas
-
-### Frontend:
-- [React](https://reactjs.org/)
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-
-### Backend:
-- API com `app/api` do Next.js (App Router)
-- Banco de Dados: `MySQL` com `mysql2/promise`
-
----
+- [Next.js 14+ (App Router)](https://nextjs.org/)
+- [React](https://react.dev/)
+- [Node.js](https://nodejs.org/)
+- [MySQL](https://www.mysql.com/)
+- [mysql2/promise](https://www.npmjs.com/package/mysql2)
+- TailwindCSS para estilização
+- Server-Sent Events (SSE) para comunicação em tempo real
 
 ## 📦 Instalação Local
 
