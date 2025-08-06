@@ -53,7 +53,7 @@ export default function Home() {
     // também lida com mensagens 'message' (padrão)
 es.onmessage = handleEvent as (this: EventSource, ev: MessageEvent) => void;
     // e erros
-    es.onerror = (err) => {
+    es.onerror = (err) => { 
       console.error("SSE error", err);
     };
 
