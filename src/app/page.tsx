@@ -134,7 +134,7 @@
             <div className="bg-green-400 text-white p-4 mt-8 rounded flex flex-col items-center gap-2 shadow-md">
               <span className="font-bold text-3xl">Ultimas chamadas</span>
               <ul className="flex flex-col gap-2 mt-5 w-full max-h-[200px] overflow-y-auto text-center">
-                {pacientes.length === 0 ? (
+                {pacientes.length === 0 || pacientesChamados.length === 0  ? (
                   <span className="italic">Nenhuma chamada recente</span>
                 ) : (
                   pacientesChamados.slice(0, 4).map((p) => (
