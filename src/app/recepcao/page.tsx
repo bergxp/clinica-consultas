@@ -5,6 +5,7 @@ export default function Recepcao() {
   type Paciente = { id: number; nome: string };
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [novoPaciente, setNovoPaciente] = useState("");
+  const [pacientesChamados, setPacientesChamados] = useState<Paciente[]>([]);
 
 
 
@@ -21,25 +22,31 @@ async function handleChamarProximo(id: number) {
     alert("Nenhum paciente na fila.");
     return;
   }
-  // Adiciona o paciente removido à lista de chamados
-  const pacienteRemovido = pacientes.find(p => p.id === id);
-  if (pacienteRemovido) {
 
-  }
+  // Encontra o paciente que será removido
+  const pacienteRemovido = pacientes.find((p) => p.id === id);
+
   const res = await fetch(`/api/pacientes?id=${id}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
   });
+
   if (res.ok) {
+    // Atualiza a lista de pacientes restantes
     const novaLista = await fetch("/api/pacientes").then((res) => res.json());
     setPacientes(novaLista);
+
+    // Adiciona o paciente à lista de chamados
+    if (pacienteRemovido) {
+      setPacientesChamados((prev) => [...prev, pacienteRemovido]);
+    }
   } else {
     const data = await res.json();
     alert("Erro ao deletar paciente: " + (data.error || "Erro desconhecido"));
     console.error("Erro ao deletar paciente:", data.error);
   }
-
 }
+
 
   async function handleEnviar() {
     if(!novoPaciente.trim()){

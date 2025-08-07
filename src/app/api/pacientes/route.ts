@@ -4,34 +4,46 @@ import { NextResponse } from "next/server";
 import { broadcast, Paciente } from "@/lib/sse";
 import dotenv from "dotenv";
 
-dotenv.config();
-
-interface ResultSetHeader {
-  insertId: number;
-  affectedRows: number;
+if (process.env.NODE_ENV !== "production") {
+  // somente para desenvolvimento local
+  dotenv.config();
 }
 
-async function ConnectDB() {
-  try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-        port: Number(process.env.DB_PORT) || 3306, // porta padrão do MySQL
-    });
-    return connection;
-  } catch (error) {
-    console.error("Erro ao conectar ao banco de dados:", error);
-    throw new Error("Não foi possível conectar ao banco de dados");
-  }
+// Cria (ou reusa) um pool global para não criar múltiplas conexões em ambientes serverless
+declare global {
+  // eslint-disable-next-line no-var
+  var __MYSQL_POOL__: mysql.Pool | undefined;
+}
+
+function getPool(): mysql.Pool {
+  if (global.__MYSQL_POOL__) return global.__MYSQL_POOL__;
+
+  const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
+    waitForConnections: true,
+    connectionLimit: process.env.DB_CONNECTION_LIMIT ? Number(process.env.DB_CONNECTION_LIMIT) : 5,
+    queueLimit: 0,
+    // opcional: debug: true,
+  });
+
+  global.__MYSQL_POOL__ = pool;
+  return pool;
+}
+
+// Tipagem simples para os resultados (mysql2 retorna RowDataPacket / OkPacket, etc.)
+interface ResultSetHeader {
+  insertId?: number;
+  affectedRows?: number;
 }
 
 export async function GET() {
   try {
-    const db = await ConnectDB();
-    const [rows] = await db.query("SELECT * FROM pacientes");
-    await db.end();
+    const pool = getPool();
+    const [rows] = await pool.query("SELECT * FROM pacientes");
     return NextResponse.json(rows);
   } catch (error) {
     console.error("Erro ao buscar pacientes:", error);
@@ -46,15 +58,14 @@ export async function POST(req: Request) {
     if (!nome) {
       return NextResponse.json({ error: "Nome do paciente é obrigatório" }, { status: 400 });
     }
-    const db = await ConnectDB();
-    const [result] = await db.query("INSERT INTO pacientes (nome) VALUES (?)", [nome]);
-    const { insertId } = result as ResultSetHeader;
+
+    const pool = getPool();
+    const [result] = await pool.query("INSERT INTO pacientes (nome) VALUES (?)", [nome]);
+    const insertId = (result as ResultSetHeader).insertId ?? null;
 
     // busca lista atualizada
-    const [rows] = await db.query("SELECT * FROM pacientes");
-    await db.end();
+    const [rows] = await pool.query("SELECT * FROM pacientes");
 
-    // broadcast — aqui tipado como Paciente[]
     const pacientes = rows as Paciente[];
     broadcast({ type: "novo_paciente", pacientes });
 
@@ -72,18 +83,17 @@ export async function DELETE(req: Request) {
     if (!id) {
       return NextResponse.json({ error: "ID do paciente é obrigatório" }, { status: 400 });
     }
-    const db = await ConnectDB();
+
+    const pool = getPool();
     const pacienteId = Number(id);
-    const [result] = await db.query("DELETE FROM pacientes WHERE id = ?", [pacienteId]);
-    if ((result as ResultSetHeader).affectedRows === 0) {
-      await db.end();
+    const [result] = await pool.query("DELETE FROM pacientes WHERE id = ?", [pacienteId]);
+
+    if (((result as ResultSetHeader).affectedRows ?? 0) === 0) {
       return NextResponse.json({ error: "Paciente não encontrado" }, { status: 404 });
     }
 
     // busca lista atualizada
-    const [rows] = await db.query("SELECT * FROM pacientes");
-    await db.end();
-
+    const [rows] = await pool.query("SELECT * FROM pacientes");
     const pacientes = rows as Paciente[];
     broadcast({ type: "deletou_paciente", pacientes });
 
